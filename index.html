@@ -1,1 +1,475 @@
-<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Dairy Management Application</title>\n    <style>\n        body {\n            font-family: Arial, sans-serif;\n            margin: 0;\n            padding: 0;\n            background-color: #f5f5f5;\n        }\n        header {\n            background-color: #4CAF50;\n            color: white;\n            padding: 15px;\n            text-align: center;\n        }\n        .container {\n            margin: 20px;\n            padding: 20px;\n            background-color: white;\n            border-radius: 8px;\n            box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n        }\n        .setting {\n            margin: 10px 0;\n        }\n        button {\n            padding: 10px 15px;\n            background-color: #4CAF50;\n            color: white;\n            border: none;\n            border-radius: 5px;\n            cursor: pointer;\n        }\n        #date {\n            margin-top: 15px;\n            font-weight: bold;\n        }\n    </style>\n</head>\n<body>\n    <header>\n        <h1>Dairy Management Application</h1>\n    </header>\n    <div class="container">\n        <div class="setting">\n            <label for="milkPrice">Set Milk Price (per liter): </label>\n            <input type="number" id="milkPrice" value="0">\n        </div>\n        <div class="setting">\n            <label for="datePicker">Select Date: </label>\n            <input type="date" id="datePicker">\n            <button id="fetchDateButton">Fetch Current Date</button>\n        </div>\n        <div id="date" class="setting"></div>\n    </div>\n    <script>\n        document.getElementById('fetchDateButton').addEventListener('click', function() {\n            let selectedDate = document.getElementById('datePicker').value;\n            let currentDate = new Date().toUTCString();\n            document.getElementById('date').innerText = selectedDate || currentDate;\n        });\n    </script>\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ganga Dudhu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0056b3;
+            --accent: #eef5ff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f9fafb;
+            --card: #ffffff;
+            --radius: 16px;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--bg);
+            padding: 20px;
+            padding-bottom: 80px; /* Space for scrolling */
+            position: relative;
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-top: 10px;
+        }
+        
+        h1 { margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+        .subtitle { font-size: 0.85rem; color: var(--text-light); }
+        
+        .icon-btn {
+            background: none; border: none; font-size: 1.5rem; cursor: pointer; padding: 8px;
+            border-radius: 50%; transition: background 0.2s;
+        }
+        .icon-btn:active { background: #e5e7eb; }
+
+        /* CARDS */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            margin-bottom: 20px;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* MONTHLY SUMMARY WIDGET */
+        .summary-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .summary-item { text-align: left; }
+        .summary-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+        .summary-label { font-size: 0.8rem; color: var(--text-light); }
+
+        /* INPUTS */
+        .input-group { margin-bottom: 15px; position: relative; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #fff;
+            transition: border 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        input:focus { outline: none; border-color: var(--primary); }
+
+        /* BUTTONS */
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,86,179,0.2);
+            transition: transform 0.1s;
+        }
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-small { padding: 8px 16px; font-size: 0.85rem; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; }
+        .btn-outline { background: transparent; border: 1px solid #e5e7eb; color: var(--text-light); }
+        .btn-delete { color: var(--danger); background: #fee2e2; padding: 6px 12px; font-size: 0.75rem; margin-left: auto;}
+
+        /* LIST */
+        .history-list { list-style: none; padding: 0; margin: 0; }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .history-item:last-child { border-bottom: none; }
+        .history-date { font-weight: 600; font-size: 0.95rem; }
+        .history-details { color: var(--text-light); font-size: 0.85rem; margin-top: 2px;}
+        .history-price { font-weight: 700; color: var(--primary); font-size: 1rem; }
+        .history-left { display: flex; flex-direction: column; }
+
+        /* MODAL & TOAST */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 100; display: none;
+            justify-content: center; align-items: center;
+        }
+        .modal { background: white; width: 90%; max-width: 350px; border-radius: 20px; padding: 25px; animation: popup 0.3s ease; }
+        
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #1f2937; color: white; padding: 12px 24px; border-radius: 50px;
+            font-size: 0.9rem; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 200;
+        }
+
+        /* TABS for Reports */
+        .tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tab { flex: 1; padding: 10px; text-align: center; background: #f3f4f6; border-radius: 8px; font-size: 0.9rem; cursor: pointer; }
+        .tab.active { background: var(--primary); color: white; font-weight: 600; }
+
+        @keyframes popup {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .report-result {
+            background: var(--accent);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <header>
+        <div>
+            <h1>Ganga Dudhu 💧</h1>
+            <div class="subtitle">Daily Milk Tracker</div>
+        </div>
+        <button class="icon-btn" onclick="openSettings()">⚙️</button>
+    </header>
+
+    <div class="card">
+        <div class="card-title">Current Month (<span id="currentMonthName"></span>)</div>
+        <div class="summary-box">
+            <div class="summary-item">
+                <div class="summary-value" id="monthLiters">0</div>
+                <div class="summary-label">Total Liters</div>
+            </div>
+            <div style="width: 1px; height: 40px; background: #e5e7eb;"></div>
+            <div class="summary-item" style="text-align: right;">
+                <div class="summary-value">₹<span id="monthCost">0</span></div>
+                <div class="summary-label">Estimated Bill</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Add Entry</div>
+        <div style="display: flex; gap: 10px;">
+            <div class="input-group" style="flex: 1.5;">
+                <input type="date" id="entryDate">
+            </div>
+            <div class="input-group" style="flex: 1;">
+                <input type="number" id="litersInput" placeholder="Liters" step="0.1" inputmode="decimal">
+            </div>
+        </div>
+        <button class="btn-primary" onclick="addEntry()">Add Record</button>
+    </div>
+
+    <div class="card">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('history')" id="tab-history">History</div>
+            <div class="tab" onclick="switchTab('report')" id="tab-report">Custom Bill</div>
+        </div>
+
+        <div id="view-history">
+            <div id="historyList" class="history-list">
+                </div>
+            <div style="text-align: center; padding: 20px; color: #9ca3af; font-size: 0.9rem;" id="emptyMsg">
+                No records yet.
+            </div>
+        </div>
+
+        <div id="view-report" style="display: none;">
+            <div class="input-group">
+                <label>From Date</label>
+                <input type="date" id="reportStart">
+            </div>
+            <div class="input-group">
+                <label>To Date</label>
+                <input type="date" id="reportEnd">
+            </div>
+            <button class="btn-primary" style="background-color: var(--text-dark);" onclick="generateReport()">Calculate Bill</button>
+            
+            <div id="reportResult" class="report-result">
+                <div style="font-size: 0.9rem; color: var(--text-light);">Total Payable</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--primary); margin: 5px 0;">₹<span id="reportTotalMoney">0</span></div>
+                <div style="font-size: 0.9rem; font-weight: 500;">Total Milk: <span id="reportTotalLiters">0</span> L</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+        <h2 style="margin-top: 0;">Settings</h2>
+        <div class="input-group">
+            <label>Current Price per Liter (₹)</label>
+            <input type="number" id="priceInput" placeholder="e.g. 60">
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn-primary" onclick="saveSettings()">Save Price</button>
+            <button class="btn-small btn-outline" onclick="closeSettings()">Cancel</button>
+        </div>
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+            <button class="btn-small" style="color: #ef4444; background: none; width: 100%;" onclick="clearAllData()">Reset All Data</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">Item Saved</div>
+
+<script>
+    // --- APP LOGIC ---
+
+    const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Set Defaults
+        document.getElementById('entryDate').valueAsDate = new Date();
+        document.getElementById('currentMonthName').innerText = MONTHS[new Date().getMonth()];
+        
+        // Load Data
+        loadDashboard();
+        loadHistory();
+    });
+
+    // --- CORE FUNCTIONS ---
+
+    function getHistory() {
+        return JSON.parse(localStorage.getItem('ganga_history') || '[]');
+    }
+
+    function saveHistory(data) {
+        localStorage.setItem('ganga_history', JSON.stringify(data));
+    }
+
+    function getPrice() {
+        return parseFloat(localStorage.getItem('ganga_price') || '0');
+    }
+
+    function addEntry() {
+        const date = document.getElementById('entryDate').value;
+        const liters = parseFloat(document.getElementById('litersInput').value);
+        const price = getPrice();
+
+        if (!date || !liters) return showToast("⚠️ Please fill all fields");
+        if (price === 0) {
+            openSettings();
+            return showToast("⚠️ Please set price first");
+        }
+
+        const entry = {
+            id: Date.now(),
+            date: date,
+            liters: liters,
+            price: price,
+            total: liters * price
+        };
+
+        const history = getHistory();
+        history.push(entry);
+        saveHistory(history);
+
+        document.getElementById('litersInput').value = ''; // clear input
+        loadDashboard();
+        loadHistory();
+        showToast("✅ Saved Successfully");
+    }
+
+    function deleteEntry(id) {
+        if(!confirm("Delete this entry?")) return;
+        let history = getHistory();
+        history = history.filter(item => item.id !== id);
+        saveHistory(history);
+        loadHistory();
+        loadDashboard();
+    }
+
+    // --- UI UPDATES ---
+
+    function loadDashboard() {
+        const history = getHistory();
+        const now = new Date();
+        const currentMonth = now.getMonth(); 
+        const currentYear = now.getFullYear();
+
+        let monthLiters = 0;
+        let monthCost = 0;
+
+        history.forEach(item => {
+            const itemDate = new Date(item.date);
+            if (itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear) {
+                monthLiters += item.liters;
+                monthCost += item.total;
+            }
+        });
+
+        document.getElementById('monthLiters').innerText = monthLiters.toFixed(1);
+        document.getElementById('monthCost').innerText = Math.round(monthCost);
+    }
+
+    function loadHistory() {
+        const history = getHistory();
+        history.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort new to old
+
+        const list = document.getElementById('historyList');
+        const emptyMsg = document.getElementById('emptyMsg');
+        
+        list.innerHTML = '';
+
+        if (history.length === 0) {
+            emptyMsg.style.display = 'block';
+            return;
+        } else {
+            emptyMsg.style.display = 'none';
+        }
+
+        // Show max 30 recent items to keep UI fast
+        history.slice(0, 30).forEach(item => {
+            const dateObj = new Date(item.date);
+            const dateStr = `${dateObj.getDate()} ${MONTHS[dateObj.getMonth()]}`;
+            
+            const li = document.createElement('div');
+            li.className = 'history-item';
+            li.innerHTML = `
+                <div class="history-left">
+                    <span class="history-date">${dateStr}</span>
+                    <span class="history-details">${item.liters} L @ ₹${item.price}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <span class="history-price">₹${Math.round(item.total)}</span>
+                    <button class="btn-delete" onclick="deleteEntry(${item.id})">×</button>
+                </div>
+            `;
+            list.appendChild(li);
+        });
+    }
+
+    function generateReport() {
+        const start = document.getElementById('reportStart').value;
+        const end = document.getElementById('reportEnd').value;
+        
+        if (!start || !end) return showToast("Select start and end dates");
+
+        const history = getHistory();
+        let totalMoney = 0;
+        let totalLiters = 0;
+
+        history.forEach(item => {
+            if (item.date >= start && item.date <= end) {
+                totalMoney += item.total;
+                totalLiters += item.liters;
+            }
+        });
+
+        document.getElementById('reportTotalMoney').innerText = Math.round(totalMoney);
+        document.getElementById('reportTotalLiters').innerText = totalLiters.toFixed(2);
+        document.getElementById('reportResult').style.display = 'block';
+    }
+
+    // --- UTILITIES ---
+
+    function openSettings() {
+        document.getElementById('priceInput').value = getPrice();
+        document.getElementById('settingsModal').style.display = 'flex';
+    }
+
+    function closeSettings() {
+        document.getElementById('settingsModal').style.display = 'none';
+    }
+
+    function saveSettings() {
+        const price = document.getElementById('priceInput').value;
+        if(price) {
+            localStorage.setItem('ganga_price', price);
+            closeSettings();
+            showToast("Price Updated");
+        }
+    }
+
+    function clearAllData() {
+        if(confirm("Are you sure? This will delete ALL history permanently.")) {
+            localStorage.removeItem('ganga_history');
+            localStorage.removeItem('ganga_price');
+            loadDashboard();
+            loadHistory();
+            closeSettings();
+            showToast("Data Cleared");
+        }
+    }
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + tabName).classList.add('active');
+
+        if(tabName === 'history') {
+            document.getElementById('view-history').style.display = 'block';
+            document.getElementById('view-report').style.display = 'none';
+        } else {
+            document.getElementById('view-history').style.display = 'none';
+            document.getElementById('view-report').style.display = 'block';
+        }
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.opacity = '1';
+        t.style.bottom = '50px';
+        setTimeout(() => {
+            t.style.opacity = '0';
+            t.style.bottom = '30px';
+        }, 3000);
+    }
+
+</script>
+</body>
+</html>
